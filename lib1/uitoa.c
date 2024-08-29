@@ -1,0 +1,62 @@
+#include "ft_printf.h"
+
+static int	symbcount(unsigned int n)
+{
+	int	res;
+
+	res = 0;
+	while (n != 0)
+	{
+		n /= 10;
+		res++;
+	}
+	return (res);
+}
+
+static char	*filling(unsigned int n, char *res, int symbols)
+{
+	int	bruh;
+
+	res[symbols] = 0;
+	while ((symbols - 1) >= 0 && n != 0)
+	{
+		if (n < 0)
+			bruh = -(n % 10) + 48;
+		else
+			bruh = (n % 10) + 48;
+		res[symbols - 1] = bruh;
+		n /= 10;
+		symbols--;
+	}
+	if (symbols == 1)
+		res[0] = '-';
+	return (res);
+}
+
+static char	*uitoa_help(unsigned int n)
+{
+	int		symbols;
+	char	*res;
+
+	if (n == 0)
+	{
+		res = ft_calloc(2, sizeof(char));
+		if (!res)
+			return (NULL);
+		res[0] = '0';
+		return (res);
+	}
+	symbols = symbcount(n);
+	if (n < 0)
+		symbols++;
+	res = ft_calloc((symbols + 1), sizeof(char));
+	if (!res)
+		return (NULL);
+	res = filling(n, res, symbols);
+	return (res);
+}
+
+char	*uitoa(long long i)
+{
+	return (uitoa_help(i));
+}
